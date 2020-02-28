@@ -1,0 +1,107 @@
+FROM node:slim
+
+RUN npm install -g textlint \
+  && npm install -g \
+  textlint-rule-preset-ja-technical-writing \
+  textlint-rule-preset-ja-spacing \
+  textlint-rule-preset-japanese \
+  textlint-rule-preset-jtf-style \
+  textlint-rule-preset-ja-engineering-paper \
+  textlint-rule-no-todo \
+  textlint-rule-no-start-duplicated-conjunction \
+  textlint-rule-max-number-of-lines \
+  textlint-rule-max-comma \
+  textlint-rule-no-exclamation-question-mark \
+  textlint-rule-ng-word \
+  @textlint-rule/textlint-rule-no-dead-link \
+  textlint-rule-editorconfig \
+  textlint-rule-no-empty-section \
+  textlint-rule-date-weekday-mismatch \
+  textlint-rule-terminology \
+  textlint-rule-period-in-list-item \
+  textlint-rule-no-surrogate-pair \
+  textlint-rule-footnote-order \
+  @textlint-rule/textlint-rule-require-header-id \
+  @textlint-rule/textlint-rule-proselint \
+  textlint-rule-max-doc-width \
+  textlint-rule-unexpanded-acronym \
+  textlint-rule-spelling dictionary-en-us \
+  textlint-rule-spellcheck-tech-word \
+  textlint-rule-abbr-within-parentheses \
+  textlint-rule-rousseau \
+  textlint-rule-alex \
+  textlint-rule-common-misspellings \
+  textlint-rule-write-good \
+  textlint-rule-en-max-word-count \
+  textlint-rule-apostrophe \
+  textlint-rule-diacritics \
+  textlint-rule-stop-words \
+  textlint-rule-en-capitalization \
+  textlint-rule-web-plus-db \
+  textlint-rule-no-hankaku-kana \
+  textlint-rule-no-mixed-zenkaku-and-hankaku-alphabet \
+  textlint-rule-first-sentence-length \
+  textlint-rule-incremental-headers \
+  textlint-rule-max-length-of-title \
+  textlint-rule-max-appearence-count-of-words \
+  @textlint-ja/textlint-rule-no-insert-dropping-sa \
+  textlint-rule-prefer-tari-tari \
+  textlint-rule-general-novel-style-ja \
+  textlint-filter-rule-whitelist \
+  textlint-filter-rule-comments \
+  textlint-filter-rule-node-types \
+  textlint-plugin-html \
+  textlint-plugin-review \
+  textlint-plugin-rst \
+  textlint-plugin-latex2e \
+  textlint-rule-prh \
+  @textlint-rule/textlint-rule-no-invalid-control-character \
+  @textlint-rule/textlint-rule-no-unmatched-pair \
+  textlint-rule-ja-no-abusage \
+  textlint-rule-ja-no-mixed-period \
+  textlint-rule-ja-no-redundant-expression \
+  textlint-rule-ja-no-successive-word \
+  textlint-rule-ja-no-weak-phrase \
+  textlint-rule-ja-unnatural-alphabet \
+  textlint-rule-max-comma \
+  textlint-rule-max-kanji-continuous-len \
+  textlint-rule-max-ten \
+  textlint-rule-no-double-negative-ja \
+  textlint-rule-no-doubled-conjunction \
+  textlint-rule-no-doubled-conjunctive-particle-ga \
+  textlint-rule-no-doubled-joshi \
+  textlint-rule-no-dropping-the-ra \
+  textlint-rule-no-exclamation-question-mark \
+  textlint-rule-no-hankaku-kana \
+  textlint-rule-no-mix-dearu-desumasu \
+  textlint-rule-no-nfd \
+  textlint-rule-sentence-length \
+  @textlint-ja/textlint-rule-no-synonyms \
+  sudachi-synonyms-dictionary \
+  @textlint-ja/textlint-rule-no-insert-re \
+  @textlint-ja/textlint-rule-morpheme-match \
+  textlint-rule-no-duplicated-bunmatsu-hyougen \
+  textlint-rule-ja-hiragana-fukushi \
+  textlint-rule-ja-hiragana-hojodoushi \
+  textlint-rule-ja-hiragana-keishikimeishi \
+  textlint-rule-use-si-units \
+  prh
+
+  #requires python
+  #textlint-rule-textlint-rule-spellchecker
+
+RUN apt update && apt -y install sudo hunspell hunspell-en-us
+
+RUN gpasswd -a node sudo && \
+    echo 'Defaults visiblepw'          >> /etc/sudoers && \
+    echo 'node ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \
+    echo 'Set disable_coredump false'  > /etc/sudo.conf
+
+WORKDIR /home/node/work
+
+ENV DICTIONARY=en_US
+
+USER node
+
+#thesaurus
+#dictionary

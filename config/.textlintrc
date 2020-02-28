@@ -1,0 +1,13 @@
+{
+  "plugins": {
+    "@textlint/text": {
+      "extensions": [".org"]
+    }
+  },
+  "rules": {
+    "preset-japanese": true,
+    "prh": {
+      "rulePaths": ["~/prh.yml"]
+    }
+  }
+}

@@ -1,0 +1,55 @@
+#!/bin/bash
+
+function _usage {
+  printf "%s: command not found\n" "${_CMD}" >&2
+}
+
+function _writing {
+  CNF_OPTS="-v $PWD:/home/node/work"
+  [ -f $PWD/.textlintrc ] || CNF_OPTS="-v ${CNF}/config:/home/node ${CNF_OPTS}"
+}
+
+function _cnf-run {
+  local _CONTAINER
+  local _CMD=$1
+  shift
+
+  case ${_CMD} in
+    "convert")
+      _CONTAINER=lurdan/cnf-imaging
+      ;;
+    "luatex")
+      _CONTAINER=lurdan/texlive
+      ;;
+    "textlint"|"prh"|"hunspell")
+      _CONTAINER=lurdan/cnf-writing
+      _writing
+      ;;
+    *)
+      _usage
+      return 127
+      ;;
+  esac
+
+  if [ "$1" = "--debug" ];
+  then
+    shift
+    _CMD=bash
+  fi
+
+  docker image inspect ${_CONTAINER} >/dev/null 2>&1 || docker pull ${_CONTAINER}
+  docker run -i --rm ${CNF_OPTS} ${_CONTAINER} ${_CMD} $*
+}
+
+
+which docker 1>/dev/null 2>&1 || _usage
+which cnf-run 1>/dev/null 2>&1 || PATH=~/.cnf/bin:${PATH}
+
+NAME=$(basename $0)
+
+if echo $NAME | grep -q cnf-run
+then
+  _cnf-run $*
+else
+  _cnf-run $NAME $*
+fi

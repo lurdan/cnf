@@ -1,0 +1,23 @@
+#!/bin/bash
+
+CNF=$(dirname "${BASH_SOURCE[0]}")
+
+which docker 1>/dev/null 2>&1 || _usage
+which cnf 1>/dev/null 2>&1 || PATH=${CNF}/bin:${PATH}
+
+function cnf-build {
+  local _NAME=$1
+  docker build -f ${CNF}/Dockerfile.${_NAME} -t lurdan/cnf-${_NAME} ${CNF}
+}
+
+function cnf-reload {
+  source ${CNF}/cnf-setup
+}
+
+function cnf-link {
+  ln -s $CNF/bin/cnf-run $CNF/bin/$1
+}
+
+function command_not_found_handle {
+  cnf-run $*
+}
